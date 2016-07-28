@@ -1,0 +1,14 @@
+---
+# Main handlers file
+
+- name: Start mongo
+  service:
+    name: mongod
+    state: started
+    enabled: yes
+
+- name: Restart mongo
+  service:
+    name: mongod
+    state: restarted
+    enabled: yes

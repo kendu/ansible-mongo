@@ -1,0 +1,4 @@
+---
+# Main mongo tasks file
+
+- include: mongo.yml

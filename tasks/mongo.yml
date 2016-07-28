@@ -1,0 +1,51 @@
+---
+# Setup mongo
+
+- name: Add mongo repo
+  apt_repository:
+      repo: "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse"
+      state: present
+
+- name: Add mongo key
+  apt_key:
+      keyserver: "hkp://keyserver.ubuntu.com:80"
+      id: "EA312927"
+      state: present
+
+- name: Install mongo
+  apt:
+      name: mongodb-org
+      update_cache: yes
+      force: yes
+      state: present
+
+- name: Create mogo data directory
+  file:
+      path: "{{ mongo_data_location }}"
+      state: directory
+      mode: 0755
+      owner: mongodb
+      group: mongodb
+
+- name: Configure mongo
+  template:
+      src: mongod_config
+      dest: /etc/mongod.conf
+      mode: 0644
+      owner: root
+      group: root
+  notify: Restart mongo
+
+- name: Create monog systemd service file
+  copy:
+    src: mongo_service
+    dest: /etc/systemd/system/mongodb.service
+    mode: 0644
+
+
+- name: Open firewall port
+  ufw:
+      port: 27017
+      proto: tcp
+      rule: allow
+      from_ip: 172.16.0.0/12
