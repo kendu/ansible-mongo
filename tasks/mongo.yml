@@ -3,8 +3,9 @@
 
 - name: Add mongo repo
   apt_repository:
-      repo: "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse"
+      repo: "{{ mongo_repo_url }}"
       state: present
+      mode: 0644
 
 - name: Add mongo key
   apt_key:
